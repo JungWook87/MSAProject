@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: board-service
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/msaPractice
+    username: root
+    password: 1234
+
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: create
+        format_sql: true
+        show_sql: true
+    generate-ddl: true
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
