@@ -2,6 +2,7 @@ package com.example.board.service;
 
 import com.example.board.dto.BoardRequestDto;
 import com.example.board.dto.BoardResponseDto;
+import com.example.board.dto.SuccessResponseDto;
 import com.example.board.model.Board;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface BoardService {
     BoardResponseDto getBoardDetail(Long id);
 
     BoardResponseDto updateBoard(Long id, BoardRequestDto requestDto) throws Exception;
+
+    SuccessResponseDto deleteBoard(Long id, BoardRequestDto requestDto);
 }

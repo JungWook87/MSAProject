@@ -10,5 +10,5 @@ import java.util.List;
 public interface BoardRepository extends JpaRepository<Board, Long> {
                                             // <엔티티, 엔티티의 ID값>
 
-    List<Board> findAllBylastModifiedDateDesc();
+    List<Board> findAllByOrderByModifiedAtDesc();
 }

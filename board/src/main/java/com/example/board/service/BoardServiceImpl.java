@@ -2,6 +2,7 @@ package com.example.board.service;
 
 import com.example.board.dto.BoardRequestDto;
 import com.example.board.dto.BoardResponseDto;
+import com.example.board.dto.SuccessResponseDto;
 import com.example.board.model.Board;
 import com.example.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public List<BoardResponseDto> geBoardList() {
-        return boardRepository.findAllBylastModifiedDateDesc().stream().map(BoardResponseDto::new).toList();
+        return boardRepository.findAllByOrderByModifiedAtDesc().stream().map(BoardResponseDto::new).toList();
         // 수정일시 기준 내림차순
         // findAll은 JPA가 기본적으로 제공해 주지만, 수정일시 내림차순은 BoardRepository에서 따로 선언 필요
         // BoardResponseDto에서 Board 엔티티를 넣으면 매개변수 생성자가 실행
@@ -51,8 +52,19 @@ public class BoardServiceImpl implements BoardService{
             throw new Exception("게시글 작성자가 아닙니다.");
         }
 
-        // 여기부터 다시
-
+        // 더티체킹
+        board.update(requestDto);
         return new BoardResponseDto(board);
+    }
+
+    @Override
+    public SuccessResponseDto deleteBoard(Long id, BoardRequestDto requestDto) {
+        Board board = boardRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("아이디가 존재하지 않습니다")
+        );
+
+        boardRepository.deleteById(id);
+
+        return new SuccessResponseDto(true);
     }
 }
