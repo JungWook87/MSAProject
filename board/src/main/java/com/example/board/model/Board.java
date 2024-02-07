@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 // 허용 범위를 설정하여 private는 proxy객체를 만들지 못하고, public은 무분별한 객체 생성이 됨으로 protected로 설정
 public class Board extends Timestamped {
 
@@ -28,9 +28,6 @@ public class Board extends Timestamped {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
     @Builder
     public Board(String title, String contents, String writer, String email){
         this.title = title;
@@ -39,9 +36,15 @@ public class Board extends Timestamped {
         this.email = email;
     }
 
-
     public Board(BoardRequestDto requestDto) {
         super();
+        this.title = requestDto.getTitle();
+        this.contents = requestDto.getContents();
+        this.writer = requestDto.getWriter();
+        this.email = requestDto.getEmail();
+    }
+
+    public void update(BoardRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
         this.writer = requestDto.getWriter();

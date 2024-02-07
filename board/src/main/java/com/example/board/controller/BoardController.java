@@ -2,10 +2,12 @@ package com.example.board.controller;
 
 import com.example.board.dto.BoardRequestDto;
 import com.example.board.dto.BoardResponseDto;
+import com.example.board.dto.SuccessResponseDto;
 import com.example.board.model.Board;
 import com.example.board.service.BoardService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +16,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/boards")
+@Slf4j
 public class BoardController {
 
-    @Autowired
     private final BoardService boardService;
     
     // 전체조회
@@ -34,6 +36,7 @@ public class BoardController {
     // 신규생성
     @PostMapping
     public BoardResponseDto createBoard(@RequestBody BoardRequestDto requestDto){
+        log.info("{}}", "requestDto :: " +  requestDto.getTitle() + " , " + requestDto.getContents()  + " , " + requestDto.getWriter() + " , " +  requestDto.getEmail());
         return boardService.createBoard(requestDto);
     }
 
@@ -42,7 +45,10 @@ public class BoardController {
     public BoardResponseDto updateBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto) throws Exception{
         return boardService.updateBoard(id, requestDto);
     }
-//
-//    // 삭제
-//    @DeleteMapping
+
+    // 삭제
+    @DeleteMapping("/{id}")
+    public SuccessResponseDto deleteBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto){
+        return boardService.deleteBoard(id, requestDto);
+    }
 }
