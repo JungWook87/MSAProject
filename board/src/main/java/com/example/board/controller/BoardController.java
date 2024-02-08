@@ -3,12 +3,9 @@ package com.example.board.controller;
 import com.example.board.dto.BoardRequestDto;
 import com.example.board.dto.BoardResponseDto;
 import com.example.board.dto.SuccessResponseDto;
-import com.example.board.model.Board;
 import com.example.board.service.BoardService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +21,7 @@ public class BoardController {
     // 전체조회
     @GetMapping
     public List<BoardResponseDto> getBoardList(){
-        return boardService.geBoardList();
+        return boardService.getBoardList();
     }
     
     // 상세조회
@@ -36,7 +33,7 @@ public class BoardController {
     // 신규생성
     @PostMapping
     public BoardResponseDto createBoard(@RequestBody BoardRequestDto requestDto){
-        log.info("{}}", "requestDto :: " +  requestDto.getTitle() + " , " + requestDto.getContents()  + " , " + requestDto.getWriter() + " , " +  requestDto.getEmail());
+        log.info("{}", "requestDto :: " +  requestDto.getTitle() + " , " + requestDto.getContents()  + " , " + requestDto.getWriter() + " , " +  requestDto.getEmail());
         return boardService.createBoard(requestDto);
     }
 

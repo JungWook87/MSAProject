@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface BoardService {
 
-    List<BoardResponseDto> geBoardList();
+    List<BoardResponseDto> getBoardList();
 
     BoardResponseDto createBoard(BoardRequestDto requestDto);
 
