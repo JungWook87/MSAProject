@@ -8,6 +8,7 @@ import com.example.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class BoardServiceImpl implements BoardService{
     private final BoardRepository boardRepository;
 
     @Override
-    public List<BoardResponseDto> geBoardList() {
+    public List<BoardResponseDto> getBoardList() {
         return boardRepository.findAllByOrderByModifiedAtDesc().stream().map(BoardResponseDto::new).toList();
         // 수정일시 기준 내림차순
         // findAll은 JPA가 기본적으로 제공해 주지만, 수정일시 내림차순은 BoardRepository에서 따로 선언 필요
@@ -51,9 +52,8 @@ public class BoardServiceImpl implements BoardService{
         if(!requestDto.getEmail().equals(board.getEmail())){
             throw new Exception("게시글 작성자가 아닙니다.");
         }
-
-        // 더티체킹
         board.update(requestDto);
+        board = boardRepository.save(board);
         return new BoardResponseDto(board);
     }
 

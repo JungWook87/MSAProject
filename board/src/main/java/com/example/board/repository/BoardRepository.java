@@ -11,4 +11,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
                                             // <엔티티, 엔티티의 ID값>
 
     List<Board> findAllByOrderByModifiedAtDesc();
+
+    @Override
+    <S extends Board> S saveAndFlush(S entity);
 }
