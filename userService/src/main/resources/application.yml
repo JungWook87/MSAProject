@@ -1,0 +1,47 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: user-service
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver  # mariaDB driver dependency 필요
+    url: jdbc:mariadb://localhost:3306/msaPMember
+    username: root
+    password: 1234
+
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: create
+        # ddl-auto 종류는 많은데 create는 @Entity에 변경이 발생했을 시 기존 테이블을 drop하고 다시 create
+        # update는 변경이 발생하면 변경된 부분만 alter로 반영
+        # 운영DB에서는 절대로 둘다 쓰면 안된다.
+        # 운영DB에서는 none(아무일도 X) or validate(엔티티클래스와 테이블이 정상 매핑되는지만 파악, 만약 테이블이 없거나
+        # 엔티티의 필드에 매핑되는 컬럼이 없으면 예외를 발생하며 어플리케이션 종료)
+        show_sql: true
+        # 작성한 sql문을 보여줌
+        format_sql: true
+        # 작성한 sql을 이쁘게 보여줌
+    generate-ddl: true
+    # ddl-auto를 사용할건지
+
+jwt:
+  header: Authorization
+  #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
+  #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret'|base64
+  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+  token-validity-in-seconds: 86400
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    # 서비스의 호스트 이름이 아닌 IP 주소를 Eureka Server에 등록하도록 지정
+  client:
+    register-with-eureka: true
+    # 레지스트리에 자신을 등록할지 여부
+    fetch-registry: true
+    # 레지스트리에 있는 정보를 가져올지 여부
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+      # EurekaServer를 바라보게 세팅

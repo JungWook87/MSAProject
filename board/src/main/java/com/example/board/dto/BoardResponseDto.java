@@ -15,7 +15,7 @@ public class BoardResponseDto {
     private String writer;
     private String email;
     private LocalDateTime createdAt;
-    private LocalDateTime modigiedAt;
+    private LocalDateTime modifiedAt;
 
     public BoardResponseDto(Board entity) {
         this.id = entity.getId();
@@ -24,6 +24,6 @@ public class BoardResponseDto {
         this.writer = entity.getWriter();
         this.email = entity.getEmail();
         this.createdAt = entity.getCreatedAt();
-        this.modigiedAt = entity.getModifiedAt();
+        this.modifiedAt = entity.getModifiedAt();
     }
 }

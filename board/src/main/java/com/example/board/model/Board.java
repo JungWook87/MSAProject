@@ -28,7 +28,6 @@ public class Board extends Timestamped {
     @Column(nullable = false)
     private String email;
 
-    @Builder
     public Board(String title, String contents, String writer, String email){
         this.title = title;
         this.contents = contents;
