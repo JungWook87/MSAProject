@@ -4,8 +4,6 @@ import com.example.board.dto.BoardRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @NoArgsConstructor
@@ -27,13 +25,6 @@ public class Board extends Timestamped {
 
     @Column(nullable = false)
     private String email;
-
-    public Board(String title, String contents, String writer, String email){
-        this.title = title;
-        this.contents = contents;
-        this.writer = writer;
-        this.email = email;
-    }
 
     public Board(BoardRequestDto requestDto) {
         this.title = requestDto.getTitle();

@@ -2,7 +2,7 @@ package com.example.userservice.service;
 
 import com.example.userservice.dto.JoinDto;
 import com.example.userservice.dto.ResponseUserDto;
-import com.example.userservice.dto.loginDto;
+import com.example.userservice.dto.LoginDto;
 import com.example.userservice.model.User;
 import com.example.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseUserDto loginProccess(loginDto loginDto) {
+    public ResponseUserDto loginProccess(LoginDto loginDto) {
         User user = userRepository.findById(loginDto.getUsername()).orElseThrow(
                 () -> new IllegalArgumentException("user not found")
         );

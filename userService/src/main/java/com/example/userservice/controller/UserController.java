@@ -1,21 +1,16 @@
 package com.example.userservice.controller;
 
 import com.example.userservice.dto.JoinDto;
+import com.example.userservice.dto.LoginDto;
 import com.example.userservice.dto.ResponseUserDto;
-import com.example.userservice.dto.loginDto;
 import com.example.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Collection;
-import java.util.Iterator;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,10 +28,16 @@ public class UserController {
     }
 
     @PostMapping("/loginProc")
-    public ModelAndView loginProccess(loginDto loginDto){
+    public ModelAndView loginProccess(LoginDto loginDto){
         ResponseUserDto responseUserDto =  userService.loginProccess(loginDto);
 
-        mav = new ModelAndView("userMain");
+        String role = responseUserDto.getRole();
+
+        mav = new ModelAndView();
+
+        if(role.equals("ROLE_USER")) mav.setViewName("userMain");
+        else if(role.equals("ROLE_ADMIN")) mav.setViewName("adminMain");
+
         return mav;
     }
 

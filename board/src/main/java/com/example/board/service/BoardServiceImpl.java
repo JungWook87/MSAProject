@@ -6,7 +6,6 @@ import com.example.board.dto.SuccessResponseDto;
 import com.example.board.model.Board;
 import com.example.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
