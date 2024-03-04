@@ -23,4 +23,10 @@ db : mariaDB <br>
   <br>
 - 24.02.29 <br>
   jwt 검증 클래스 구현 <br>
-  
+  <br>
+- 24.03.04
+  jwt 토큰 발급 및 검증 <br>
+  LoginFilter에 JWTUtil 의존성 주입 후 토큰 생성 <br>
+  JWTFilter 클래스 생성 후 토큰 검증 <br>
+  포스트맨으로 테스트 <br>
+
