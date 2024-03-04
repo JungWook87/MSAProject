@@ -41,6 +41,18 @@ public class UserController {
         return mav;
     }
 
+    @GetMapping("/admin")
+    public ModelAndView adminP(){
+        mav = new ModelAndView("adminMain");
+        return mav;
+    }
+
+    @GetMapping("/main")
+    public ModelAndView mainP(){
+        mav = new ModelAndView("userMain");
+        return mav;
+    }
+
     // 회원가입 페이지
     @GetMapping("/join")
     public ModelAndView joinP(){

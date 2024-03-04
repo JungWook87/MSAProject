@@ -28,17 +28,17 @@ public class JWTUtil {
 
     public String getUsername(String token){
         return Jwts.parserBuilder().setSigningKey(key).build()
-                .parseClaimsJwt(token).getBody().get("username", String.class);
+                .parseClaimsJws(token).getBody().get("username", String.class);
     }
 
     public String getRole(String token){
         return Jwts.parserBuilder().setSigningKey(key).build()
-                .parseClaimsJwt(token).getBody().get("role", String.class);
+                .parseClaimsJws(token).getBody().get("role", String.class);
     }
 
     public Boolean isExpired(String token){
         return Jwts.parserBuilder().setSigningKey(key).build()
-                .parseClaimsJwt(token).getBody().getExpiration().before(new Date());
+                .parseClaimsJws(token).getBody().getExpiration().before(new Date());
     }
 
     public String createJwt(String username, String role, Long expiredMs){
@@ -51,7 +51,7 @@ public class JWTUtil {
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setIssuer(issuer)
                 .setExpiration(new Date(System.currentTimeMillis() + expiredMs))
-                .signWith(key, SignatureAlgorithm.ES512)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 

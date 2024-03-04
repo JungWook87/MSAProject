@@ -1,5 +1,7 @@
 package com.example.userservice.config;
 
+import com.example.userservice.jwt.JWTFilter;
+import com.example.userservice.jwt.JWTUtil;
 import com.example.userservice.jwt.LoginFilter;
 import com.example.userservice.service.MyUserDetailsService;
 import lombok.AllArgsConstructor;
@@ -23,6 +25,8 @@ public class SecurityConfig {
     private final MyUserDetailsService myUserDetailsService;
 
     private final AuthenticationConfiguration authenticationConfiguration;
+
+    private final JWTUtil jwtUtil;
 
     // 로그인필터의 생성자를 위해
     @Bean
@@ -70,7 +74,11 @@ public class SecurityConfig {
         // 첫번째 인자는 무슨 필터를, 두번째 인자는 위치
         // UsernamePasswordAuthenticationFilter의 역할을 수동적으로 만들어줬기 때문에 위치가 여기가 됨
 
-        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration));
+        // 토큰 검증 필터 등록
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+
+        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
         loginFilter.setFilterProcessesUrl("/api/users/loginProc");
         http
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
