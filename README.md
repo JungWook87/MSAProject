@@ -29,4 +29,8 @@ db : mariaDB <br>
   LoginFilter에 JWTUtil 의존성 주입 후 토큰 생성 <br>
   JWTFilter 클래스 생성 후 토큰 검증 <br>
   포스트맨으로 테스트 <br>
+- 24.03.05
+  jwt 세션 사용해보기
+  CORS 개념 및 설정하기
+  CorsMvcConfig 클래스 생성
 
