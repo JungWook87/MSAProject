@@ -41,6 +41,7 @@ public class JWTUtil {
                 .parseClaimsJws(token).getBody().getExpiration().before(new Date());
     }
 
+    // 단일 토큰
     public String createJwt(String username, String role, Long expiredMs){
         Claims claims = Jwts.claims();
         claims.put("username", username);
@@ -53,6 +54,26 @@ public class JWTUtil {
                 .setExpiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public String createJwt(String category, String username, String role, Long expiredMs){
+        Claims claims = Jwts.claims();
+        claims.put("category", category);
+        claims.put("username", username);
+        claims.put("role", role);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setIssuer(issuer)
+                .setExpiration(new Date(System.currentTimeMillis() + expiredMs))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String getCategory(String token){
+        return Jwts.parserBuilder().setSigningKey(key).build()
+                .parseClaimsJws(token).getBody().get("category", String.class);
     }
 
 }
