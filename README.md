@@ -11,7 +11,11 @@ Security : 6.2.1 <br>
 jwt : 0.11.5 <br>
 db : mariaDB <br>
 
-### 개발 진행
+### 개발 진행 <br>
+- 24.03.13 <br>
+  인증 받은 ATK 검증 로직 <br>
+  JWTFilter 수정 <br>
+  
 - 24.03.07 <br>
   다중 토큰 발급(ATK , RTK) <br>
   LoginFilter, JWTUtil 클래스 수정 <br>
