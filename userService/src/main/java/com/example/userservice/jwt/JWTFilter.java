@@ -2,6 +2,7 @@ package com.example.userservice.jwt;
 
 import com.example.userservice.dto.MyUserDetails;
 import com.example.userservice.model.User;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @RequiredArgsConstructor
 @Component
@@ -25,6 +27,7 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        /* 단일토큰
         // request의 해더에 담아진 토큰 정보를 해석하여 유저 정보를 가져와야 한다
         // 이를 JWTUtil이 진행한다
 
@@ -85,7 +88,68 @@ public class JWTFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
 
-        // 검증 필터를 만들었다면 SecurityConfig에 가서 필터를 등록해주자 
+        // 검증 필터를 만들었다면 SecurityConfig에 가서 필터를 등록해주자
+        */
+
+        // 헤더에서 access키에 담긴 토큰을 꺼낸다
+        String accessToken = request.getHeader("access");
+
+        // 토큰이 없다면 다음 필터로 넘긴다
+        // 인증,인가 검증이 필요없는 서비스 요청도 있기 때문이다
+        if(accessToken == null){
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // 토큰이 있다면 유효성 검사를 진행한다
+        // 중요한 점은 유효성이 만료가 되었으면 다음 필터로 넘기지 않는다. 프론트로 상태를 전달한다
+        try{
+            jwtUtil.isExpired(accessToken);
+
+        // 유효기간 만료 시 예외가 날라온다
+        } catch (ExpiredJwtException e){
+
+            // response body
+            PrintWriter writer = response.getWriter();
+            writer.print("access token expired");
+
+            // response status code
+            // 상태코드를 프론트로 넘기고, 다음 필터로 전송하지 않는다!!
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
+        // 토큰이 acceess 인지 확인 (발급 시 페이로드에 명시한다)
+        String category = jwtUtil.getCategory(accessToken);
+
+        if(!category.equals("access")){
+
+            // response body
+            PrintWriter writer = response.getWriter();
+            writer.print("invalid access token");
+
+            // response status code
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
+        // 유효기간과 acceess 토큰의 검증이 끝나면 username과 role을 꺼낸다
+        String username = jwtUtil.getUsername(accessToken);
+        String role = jwtUtil.getRole(accessToken);
+
+        // 정보를 userEntity에 담는다
+        User user = new User();
+        user.setEmail(username);
+        user.setRole(role);
+
+        // UserDetails에 담는다
+        MyUserDetails myUserDetails = new MyUserDetails(user);
+
+        // 스프링 시큐리티에 인증 토큰 생성
+        Authentication authToken = new UsernamePasswordAuthenticationToken(myUserDetails, null, myUserDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authToken);
+
+        filterChain.doFilter(request, response);
     }
 
 }

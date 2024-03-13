@@ -41,7 +41,7 @@ public class JWTUtil {
                 .parseClaimsJws(token).getBody().getExpiration().before(new Date());
     }
 
-    // 단일 토큰
+    /* 단일 토큰
     public String createJwt(String username, String role, Long expiredMs){
         Claims claims = Jwts.claims();
         claims.put("username", username);
@@ -55,7 +55,9 @@ public class JWTUtil {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
+     */
 
+    // 다중 토큰
     public String createJwt(String category, String username, String role, Long expiredMs){
         Claims claims = Jwts.claims();
         claims.put("category", category);
